@@ -11,10 +11,16 @@ metadata:
   name: main-deployment
   labels:
     {{- include "ingress-duplication.labels" . | nindent 4 }}
-  {{- with .Values.ingress.annotations }}
   annotations:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      mirror /mirror;
+    nginx.ingress.kubernetes.io/server-snippet: |
+      location = /mirror {
+          internal;
+          set $shadow_service_name    "main-deployment";
+          proxy_set_header X-Shadow-Service  $shadow_service_name;
+          proxy_pass http://10.106.186.91$request_uri;
+      }
 spec:
   rules:
     - host: main-deployment.local

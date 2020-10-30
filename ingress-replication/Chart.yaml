@@ -4,7 +4,7 @@ description: A proof of concept implementation of ingress replication in Kuberne
 
 type: application
 
-version: 0.1.3
+version: 0.1.4
 
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application.
