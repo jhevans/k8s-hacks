@@ -8,7 +8,7 @@ apiVersion: extensions/v1beta1
 {{- end }}
 kind: Ingress
 metadata:
-  name: main-deployment
+  name: replicated-deployment
   labels:
     {{- include "ingress-duplication.labels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}
@@ -17,11 +17,11 @@ metadata:
   {{- end }}
 spec:
   rules:
-    - host: main-deployment.local
+    - host: replicated-deployment.local
       http:
         paths:
           - path: /
             backend:
-              serviceName: main-deployment
+              serviceName: replicated-deployment
               servicePort: {{ $svcPort }}
 {{- end }}
