@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "ingress-duplication.fullname" . }}-test-connection"
+  labels:
+    {{- include "ingress-duplication.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "ingress-duplication.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
