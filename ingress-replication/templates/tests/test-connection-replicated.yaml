@@ -5,7 +5,8 @@ metadata:
   labels:
     {{- include "ingress-duplication.labels" . | nindent 4 }}
   annotations:
-    "helm.sh/hook": test
+    helm.sh/hook: test
+    helm.sh/hook-delete-policy: hook-succeeded
 spec:
   containers:
     - name: wget

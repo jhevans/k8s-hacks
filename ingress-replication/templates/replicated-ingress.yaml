@@ -11,16 +11,17 @@ metadata:
   name: replicated-deployment
   labels:
     {{- include "ingress-duplication.labels" . | nindent 4 }}
-  {{- with .Values.ingress.annotations }}
   annotations:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
+#    This annotation in combination with the regex in the path (see ⭐️) allows capturing parts of the original path
+#    and rewriting it to something that suits us better using the placeholder $2
+    nginx.ingress.kubernetes.io/rewrite-target: /whatever/we/$2/please/
 spec:
   rules:
     - host: replicated-deployment.local
       http:
         paths:
-          - path: /
+#          ⭐️ Everything after 'something' will be captured and replaced into the rewritten url at $2
+          - path: /something(/|$)(.*)
             backend:
               serviceName: replicated-deployment
               servicePort: {{ $svcPort }}

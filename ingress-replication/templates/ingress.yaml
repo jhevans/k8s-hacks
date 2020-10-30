@@ -12,8 +12,13 @@ metadata:
   labels:
     {{- include "ingress-duplication.labels" . | nindent 4 }}
   annotations:
+#    These annotations allow replication of a service to a different location. Responses from the replica
+#    service are discarded.
     nginx.ingress.kubernetes.io/configuration-snippet: |
       mirror /mirror;
+# The proxy_pass directive uses the hard-coded ip of the service and will need updating.  We ought to be using the host
+# 'replicated-deployment.local' here but for some reason the k8s DNS isn't resolving it in minikube. The principle works though.
+# This X-Shadow-Service header is optional
     nginx.ingress.kubernetes.io/server-snippet: |
       location = /mirror {
           internal;
